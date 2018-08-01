@@ -22,5 +22,6 @@ $RECYCLE.BIN/
 *.lnk
 
 env/
+
 .gitignore
 
