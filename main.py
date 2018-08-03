@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from config import DevConfig
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import not_, or_
 
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, SelectField, IntegerField, SubmitField
@@ -61,7 +62,7 @@ class User(db.Model):
         self.Tel_Number = tel
 
     def __repr__(self):
-        return "<User '{} {} {} {} {} '>" .format(self.username, self.Password, self.Gender, self.Email, self.Tel_Number)
+        return "<User '{} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number)
 
 
 
@@ -72,9 +73,32 @@ class User(db.Model):
 @app.route('/')
 def index():
     return render_template('index2.html', title="测试主页")
-@app.route('/login')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        print "name"
+        print(request.form.get("name_login"))
+        userlogin_name = request.form.get("name_login")
+        userlogin_password = request.form.get("password_login")
+        print(userlogin_name)
+        print(userlogin_password)
+
+        # if User.query.filter(or_(User.Username==userlogin_name, User.Email==userlogin_name)).all() and User.query.filter(User.Password==userlogin_password) :
+            # return render_template('index2.html', userlogin_name=userlogin_name)
+            # print "Success"
+        user = User.query.filter_by(Username=userlogin_name).first()
+        if user is not None and user.Password==userlogin_password:
+            log = 1
+            return render_template('index2.html', userlogin_name=userlogin_name, log=log)
+            flash("登陆成功")
+        else:
+            flash("用户名或密码错误！")
+            log =0
+            return  render_template('login2.html')
     return render_template('login2.html', title="测试登陆")
+
+
 
 exist = 0
 flag = 0

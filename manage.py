@@ -1,6 +1,6 @@
 from flask_script import Manager, Server
 from main import app, db, User
-
+from sqlalchemy.sql.expression import not_, or_
 
 manager = Manager(app)
 manager.add_command("server", Server())
