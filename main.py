@@ -4,10 +4,40 @@ from config import DevConfig
 
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_wtf import Form
+from wtforms import StringField, TextAreaField, SelectField, IntegerField, SubmitField
+from wtforms.validators import DataRequired, Length, Email
+from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 app.config.from_object(DevConfig)
 
 db = SQLAlchemy(app)
+
+bootstrap = Bootstrap(app)
+# 表单对象
+class RegisterForm(Form):
+    Name = StringField(
+        u'名字',
+        validators=[DataRequired(), Length(max=255)]
+    )
+
+    Password = StringField(
+        u'密码',
+        validators=[DataRequired(), Length(max=255)]
+    )
+
+    Email = StringField(
+        u'邮件',
+        validators=[DataRequired, Email()]
+    )
+    Tel = IntegerField(
+        u'电话',
+        validators=[DataRequired, Length(max=11)]
+    )
+    Gender = SelectField(
+        u'性别',
+        validators=[DataRequired()]
+    )
 
 
 
@@ -15,83 +45,58 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = 'User'  #表名字默认是类名字的小写版本(如果没有此语句) 
     
-    id = db.Column(db.Integer(), primary_key=True)
-    username = db.Column(db.String(255))
-    password = db.Column(db.String(255))
-    posts = db.relationship(    
-        'Post',
-        backref = 'user',
-        lazy = 'dynamic'
-    )
+    Id = db.Column(db.Integer(), primary_key=True)
+    Username = db.Column(db.String(255))
+    Password = db.Column(db.String(255))
+    Gender = db.Column(db.Integer())
+    Email = db.Column(db.String(255))
+    Tel_Number = db.Column(db.String(255))
+
 #以下的两个def 可以不用写，系统会自动添加    
-    def __init__(self, username):
-        self.username = username
+    def __init__(self, username, password, gender, email, tel):
+        self.Username = username
+        self.Password = password
+        self.Gender = gender
+        self.Email = email
+        self.Tel_Number = tel
 
     def __repr__(self):
-        return "<User '{}'>" .format(self.username)
-
-
-tags = db.Table('post_tags',
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
-)
+        return "<User '{} {} {} {} {} '>" .format(self.username, self.Password, self.Gender, self.Email, self.Tel_Number)
 
 
 
-class Post(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(255))
-    text = db.Column(db.Text())
-    publish_date = db.Column(db.DateTime())
-    comments = db.relationship(
-        'Comment',
-        backref='post',
-        lazy='dynamic'
-    )
-    user_id = db.Column(db.Integer(), db.ForeignKey('User.id'))   #关联形数据模型，post表关联到User表
-
-    tags = db.relationship(
-        'Tag',
-        secondary=tags,
-        backref=db.backref('posts', lazy='dynamic')
-    )
-    
-    def __init__(self, title):
-        self.title = title
-
-    def __repr__(self):
-        return "<Post '{}'>" .format(self.title)
-
-class Tag(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(255))
-    
-    def __init__(self, title):
-        self.title = title
-    def __repr__(self):
-        return "<Tag '{}'>" .format(self.title)
-
-
-class Comment(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(255))
-    text = db.Column(db.Text())
-    date = db.Column(db.DateTime())
-    post_id = db.Column(db.Integer(), db.ForeignKey('post.id'))
-    
-    def __repr__(self):
-        return "<Comment '{}'>" .format(self.text[:15])
 
 
 # 路由部分
 
 @app.route('/')
 def index():
-    return render_template('index.html', title="测试主页")
+    return render_template('index2.html', title="测试主页")
 @app.route('/login')
 def login():
-    return render_template('login.html', title="测试登陆")
+    return render_template('login2.html', title="测试登陆")
+
+exist = 0
+flag = 0
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    global exist
+    global flag
+    exist = 0
+    flag = 0
+    if request.method == 'POST':
+        new_username = request.form.get("Name")
+        print new_username
+        if User.query.filter_by(Username=new_username).all():
+            exist = 1
+        else:
+            user_forsql = User(new_username, request.form.get("Password"), request.form.get("Gender"), request.form.get("Email"), request.form.get("Tel"))
+            db.session.add(user_forsql)
+            db.session.commit()
+            flag = 1
+    return render_template('register.html', exist=exist, flag=flag)
+
 
 
 if __name__ == '__main__':
-    app.run(host='172.16.252.178', port=9999)
+    app.run(host='localhost', port=80)

@@ -1,7 +1,2 @@
-# flask_learn01
-
-#### 项目介绍
-learn flask , keep updating 
-
-#### 软件架构
-python2.7 
+# flask 学习项目
+##flask版本：python2.7
