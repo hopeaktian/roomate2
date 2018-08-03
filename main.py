@@ -16,29 +16,29 @@ db = SQLAlchemy(app)
 
 bootstrap = Bootstrap(app)
 # 表单对象
-class RegisterForm(Form):
-    Name = StringField(
-        u'名字',
-        validators=[DataRequired(), Length(max=255)]
-    )
-
-    Password = StringField(
-        u'密码',
-        validators=[DataRequired(), Length(max=255)]
-    )
-
-    Email = StringField(
-        u'邮件',
-        validators=[DataRequired, Email()]
-    )
-    Tel = IntegerField(
-        u'电话',
-        validators=[DataRequired, Length(max=11)]
-    )
-    Gender = SelectField(
-        u'性别',
-        validators=[DataRequired()]
-    )
+# class RegisterForm(Form):
+#     Name = StringField(
+#         u'名字',
+#         validators=[DataRequired(), Length(max=255)]
+#     )
+#
+#     Password = StringField(
+#         u'密码',
+#         validators=[DataRequired(), Length(max=255)]
+#     )
+#
+#     Email = StringField(
+#         u'邮件',
+#         validators=[DataRequired, Email()]
+#     )
+#     Tel = IntegerField(
+#         u'电话',
+#         validators=[DataRequired, Length(max=11)]
+#     )
+#     Gender = SelectField(
+#         u'性别',
+#         validators=[DataRequired()]
+#     )
 
 
 
@@ -77,12 +77,8 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        print "name"
-        print(request.form.get("name_login"))
         userlogin_name = request.form.get("name_login")
         userlogin_password = request.form.get("password_login")
-        print(userlogin_name)
-        print(userlogin_password)
 
         # if User.query.filter(or_(User.Username==userlogin_name, User.Email==userlogin_name)).all() and User.query.filter(User.Password==userlogin_password) :
             # return render_template('index2.html', userlogin_name=userlogin_name)
@@ -109,13 +105,10 @@ def register():
     exist = 0
     flag = 0
     if request.method == 'POST':
-        R_username = request.form.get("Name")
-        new_username = unicode(R_username)
-        print type(new_username)
-        print "test"
+        new_username = request.form.get("Name")
+
         if User.query.filter_by(Username=new_username).all():
             exist = 1
-            print(type(new_username))
         else:
             user_forsql = User(new_username, request.form.get("Password"), request.form.get("Gender"), request.form.get("Email"), request.form.get("Tel"))
             db.session.add(user_forsql)
