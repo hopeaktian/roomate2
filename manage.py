@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_script import Manager, Server
 from main import app, db, User
 from sqlalchemy.sql.expression import not_, or_

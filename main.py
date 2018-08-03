@@ -109,10 +109,13 @@ def register():
     exist = 0
     flag = 0
     if request.method == 'POST':
-        new_username = request.form.get("Name")
-        print new_username
+        R_username = request.form.get("Name")
+        new_username = unicode(R_username)
+        print type(new_username)
+        print "test"
         if User.query.filter_by(Username=new_username).all():
             exist = 1
+            print(type(new_username))
         else:
             user_forsql = User(new_username, request.form.get("Password"), request.form.get("Gender"), request.form.get("Email"), request.form.get("Tel"))
             db.session.add(user_forsql)
