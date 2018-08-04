@@ -17,48 +17,53 @@
         <br>
         <br>
 
-        <form class="form-horizontal" role="form" method="post">
+        <form class="form-horizontal" role="form" method="post" style="margin-left: 31%; margin-right: 31%; margin-top: 0%; margin-bottom: 5%; ">
             <div class="text-center" >
-                <h1 class="heading" style="margin-top: -11px; margin-bottom: 41px; color: #e0e0e0; ">新用户注册</h1>
+                <h1 class="heading" style="margin-top: -11px; margin-bottom: 41px; padding-bottom: 18px; color: #e0e0e0; ">欢迎注册</h1>
             </div>
             <div class="form-group">
-                <label  class="col-sm-4 control-label" style="color: #888888">用户名</label>
-                <div class="col-sm-7">
+{#                <label  class="col-sm-4 control-label" style="color: #888888">用户名</label>#}
+                <div class="col-sm-8 col-sm-offset-2">
                     <input type="text" class="form-control" name="Name" placeholder="请输入用户名" required="required">
                 </div>
             </div>
+            
             <div class="form-group">
-                <label  class="col-sm-4 control-label" style="color: #888888">密码</label>
-                <div class="col-sm-7">
+{#                <label  class="col-sm-4 control-label" style="color: #888888">密码</label>#}
+                <div class="col-sm-8 col-sm-offset-2">
                     <input type="password" class="form-control" name="Password" placeholder="请输入密码" required="required">
                 </div>
             </div>
             <div class="form-group">
-                <label  class="col-sm-4 control-label" style="color: #888888">邮件</label>
-                <div class="col-sm-7">
+{#                <label  class="col-sm-4 control-label" style="color: #888888">邮件</label>#}
+                <div class="col-sm-8 col-sm-offset-2">
                     <input type="email" class="form-control" name="Email" placeholder="请输入邮件" required="required">
                 </div>
             </div>
             <div class="form-group">
-                <label  class="col-sm-4 control-label" style="color: #888888">电话</label>
-                <div class="col-sm-7">
+{#                <label  class="col-sm-4 control-label" style="color: #888888">电话</label>#}
+                <div class="col-sm-8 col-sm-offset-2">
                     <input type="tel" class="form-control" name="Tel" placeholder="请输入电话" required="required" maxlength="11">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" style="color: #888888">性别</label>
-                <div class="col-sm-1" >
+{#                <label class="col-sm-4 control-label" style="color: #888888">性别</label>#}
+                <div class="col-sm-2 col-sm-offset-2" >
                     <input type="radio" name="Gender" value="1" class="form-control"><label style="color: #888888">男</label>
                 </div>
-                <div class="col-sm-1">
+                <div class="col-sm-3 col-sm-pull-1">
                     <input type="radio" name="Gender" value="0" class="form-control"><label style="color: #888888">女</label>
+                </div>
+
+                <div class="col-sm-4 col-sm-pull-1">
+                    <button type="submit" class="btn btn-default">立即注册</button>
                 </div>
 
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-4">
-                    <button type="submit" class="btn btn-default">立即注册</button>
-                </div>
+{#                <div class="col-sm-offset-4 col-sm-4">#}
+{#                    <button type="submit" class="btn btn-default">立即注册</button>#}
+{#                </div>#}
             </div>
 
             <div class="form-group">
