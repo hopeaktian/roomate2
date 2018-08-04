@@ -80,7 +80,9 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global log
-    log = 1
+    global status
+    log = 0
+    status = 1
     if request.method == 'POST':
         userlogin_name = request.form.get("name_login")
         userlogin_password = request.form.get("password_login")
@@ -90,14 +92,14 @@ def login():
             # print "Success"
         user = User.query.filter_by(Username=userlogin_name).first()
         if user is not None and user.Password==userlogin_password:
-            log = 1
+            status = 1
             # flash(u'登陆成功', category="success")
             return render_template('index2.html', userlogin_name=userlogin_name, log=log)
 
         else:
             # flash(u'用户名或密码错误！', category="danger")
-            log = 0
-            return  render_template('login2.html', log=log)
+            status = 0
+            return  render_template('login2.html', status=status, log=log)
     return render_template('login2.html', title="测试登陆", log=log)
 
 
