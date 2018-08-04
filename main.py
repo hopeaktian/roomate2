@@ -88,7 +88,7 @@ def login():
         user = User.query.filter_by(Username=userlogin_name).first()
         if user is not None and user.Password==userlogin_password:
             log = 1
-            flash(u'登陆成功', category="success")
+            # flash(u'登陆成功', category="success")
             return render_template('index2.html', userlogin_name=userlogin_name, log=log)
 
         else:
@@ -113,11 +113,13 @@ def register():
 
         if User.query.filter_by(Username=new_username).all():
             exist = 1
+            # flash(u"注册失败！！用户名已存在!   换个更个性的用户名吧 -_-", category="danger")
         else:
             user_forsql = User(new_username, request.form.get("Password"), request.form.get("Gender"), request.form.get("Email"), request.form.get("Tel"))
             db.session.add(user_forsql)
             db.session.commit()
             flag = 1
+            # flash("恭喜您！注册成功", category="success")
     return render_template('register.html', exist=exist, flag=flag)
 
 

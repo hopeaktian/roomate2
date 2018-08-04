@@ -68,16 +68,22 @@
 
             <div class="form-group">
                 {% if exist == 1 %}
-                <div class="col-sm-6 col-sm-offset-3 alert alert-danger">
+                <div class="alert alert-danger">
                     注册失败！！用户名已存在!   换个更个性的用户名吧 -_-
                 </div>
                 {% elif flag == 1 %}
-                <div class="col-sm-6 col-sm-offset-3 alert alert-success">
+                <div class="alert alert-success">
                     恭喜您！注册成功
                 </div>
                 {% endif %}
 
             </div>
+{#            {% for message in get_flashed_messages() %}#}
+{#                <div class="alert alert-warning">#}
+{#                    <button type="button" class="close" data-dismiss="alert">&times;</button>#}
+{#                    {{ message }}#}
+{#                </div>#}
+{#            {% endfor %}#}
         </form>
     </div>
 {% endblock content %}
