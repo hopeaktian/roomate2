@@ -93,6 +93,7 @@ def login():
         user = User.query.filter_by(Username=userlogin_name).first()
         if user is not None and user.Password==userlogin_password:
             status = 1
+            log = 1
             # flash(u'登陆成功', category="success")
             return render_template('index2.html', userlogin_name=userlogin_name, log=log)
 
