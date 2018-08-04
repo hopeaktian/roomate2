@@ -76,8 +76,11 @@ class User(db.Model):
 def index():
     return render_template('index2.html', title="测试主页")
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    global log
+    log = 1
     if request.method == 'POST':
         userlogin_name = request.form.get("name_login")
         userlogin_password = request.form.get("password_login")
@@ -92,15 +95,14 @@ def login():
             return render_template('index2.html', userlogin_name=userlogin_name, log=log)
 
         else:
-            flash(u'用户名或密码错误！', category="danger")
-            log =0
-            return  render_template('login2.html')
-    return render_template('login2.html', title="测试登陆")
+            # flash(u'用户名或密码错误！', category="danger")
+            log = 0
+            return  render_template('login2.html', log=log)
+    return render_template('login2.html', title="测试登陆", log=log)
 
 
 
-exist = 0
-flag = 0
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     global exist
