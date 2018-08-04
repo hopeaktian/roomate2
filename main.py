@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from flask import Flask, render_template, request, flash
 from config import DevConfig
 
@@ -52,6 +53,7 @@ class User(db.Model):
     Gender = db.Column(db.Integer())
     Email = db.Column(db.String(255))
     Tel_Number = db.Column(db.String(255))
+    Register_Date = db.Column(db.DateTime, default=datetime.datetime.now)
 
 #以下的两个def 可以不用写，系统会自动添加    
     def __init__(self, username, password, gender, email, tel):
@@ -62,7 +64,7 @@ class User(db.Model):
         self.Tel_Number = tel
 
     def __repr__(self):
-        return "<User '{} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number)
+        return "<User '{} {} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number, self.Register_Date)
 
 
 
@@ -86,10 +88,11 @@ def login():
         user = User.query.filter_by(Username=userlogin_name).first()
         if user is not None and user.Password==userlogin_password:
             log = 1
+            flash(u'登陆成功', category="success")
             return render_template('index2.html', userlogin_name=userlogin_name, log=log)
-            flash("登陆成功")
+
         else:
-            flash("用户名或密码错误！")
+            flash(u'用户名或密码错误！', category="danger")
             log =0
             return  render_template('login2.html')
     return render_template('login2.html', title="测试登陆")
@@ -106,6 +109,7 @@ def register():
     flag = 0
     if request.method == 'POST':
         new_username = request.form.get("Name")
+        # Registertime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
         if User.query.filter_by(Username=new_username).all():
             exist = 1
