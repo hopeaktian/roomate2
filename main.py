@@ -72,8 +72,9 @@ class Criticism(db.Model):
     Id = db.Column(db.Integer(), primary_key=True)
     Nickname = db.Column(db.String(255))
     Criticism = db.Column(db.String(255))
+    Cri_Date = db.Column(db.DateTime, default=datetime.datetime.now)
 
-    def __init__(self, nickname, criticism):
+    def __init__(self, nickname, criticism,):
         self.Nickname = nickname
         self.Criticism = criticism
     #

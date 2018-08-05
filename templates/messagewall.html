@@ -31,11 +31,14 @@
             <div class="comment-post well" style="background-color: #bc8d8a82;">
 
                 {% for mes in range(lenth) %}
-                <div class="col-lg-1" style="padding-left: 57px;">
+                <div class="col-sm-1" style="padding-left: 57px;">
                     <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 30px; width: 30px;">
                 </div>
-                <div class="col-lg-11" style="padding-left: 0px">
+                <div class="col-sm-6" style="padding-left: 0px">
                     <h4 style="font-weight: 600">{{ allCri[mes].Nickname }}:</h4>
+                </div>
+                <div class="col-sm-5" style="padding-left: 0px">
+                    <h4 style="font-weight: 600">{{ allCri[mes].Cri_Date }}:</h4>
                 </div>
                 <div>
                     <h4 style="margin-left: 90px">{{ allCri[mes].Criticism }}</h4>
@@ -58,19 +61,19 @@
             <hr>
             <div class="comment-post well" style="height: 213px; background-color: #bc8d8a82;">
 
-                <div class="cmtcontainer col-lg-12 col-lg-offset-1" >
+                <div class="cmtcontainer col-sm-6 col-sm-offset-1" >
                     <input type="text" name="nickname" placeholder="我的昵称" required="required" style="height: 34px; width: 282px;">
                 </div>
                 <br>
                 <br>
-                <div class="col-lg-1">
+                <div class="col-sm-1">
                     <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 30px; width: 30px;">
                 </div>
 
-                <div class="cmtcontainer col-lg-11" >
-                    <textarea name="criticism" placeholder="我也要吐槽" style="width: 879px; height: 101px; resize: none"></textarea>
+                <div class="cmtcontainer col-sm-11" >
+                    <textarea name="criticism" placeholder="我也要吐槽" style="width: 80%; height: 101px; resize: none"></textarea>
                 </div>
-                <div class="col-lg-1 col-lg-offset-10">
+                <div class="col-sm-1 col-sm-offset-9">
                     <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
