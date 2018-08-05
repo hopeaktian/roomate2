@@ -66,7 +66,19 @@ class User(db.Model):
     def __repr__(self):
         return "<User '{} {} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number, self.Register_Date)
 
+class Criticism(db.Model):
+    __tablename__ = 'Criticism'
 
+    Id = db.Column(db.Integer(), primary_key=True)
+    Nickname = db.Column(db.String(255))
+    Criticism = db.Column(db.String(255))
+
+    def __init__(self, nickname, criticism):
+        self.Nickname = nickname
+        self.Criticism = criticism
+    #
+    # def __repr__(self):
+    #     return "< '{} {}' >" .format(self.Nickname, self.Criticism)
 
 
 
@@ -74,7 +86,24 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    return render_template('index2.html', title="测试主页")
+    return render_template('index2.html', title="主页")
+
+@app.route('/messagewall', methods=['GET', 'POST'])
+def messagewall():
+    global success
+    global lenth
+    success = 0             #评论初始值为0即失败
+    lenth = 0
+    allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
+    lenth = len(allCri)
+
+    if request.method == 'POST':
+        Criticismfrosql = Criticism(request.form.get("nickname"), request.form.get("criticism"))
+        db.session.add(Criticismfrosql)
+        db.session.commit()
+        success = 1
+        return render_template('messagewall.html', title="留言墙", success=success, allCri=allCri, lenth=lenth)
+    return render_template('messagewall.html', title="留言墙", allCri=allCri, lenth=lenth)
 
 
 @app.route('/login', methods=['GET', 'POST'])

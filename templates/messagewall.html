@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+{#    <div class="container-fluid">#}
+{##}
+{#    </div>#}
+{##}
+{#    <div class="container input-group-addon input-lg" >#}
+{#        <form>#}
+{#            <input type="text" class="input-group-sm" name="message" placeholder="请在此输入留言内容" required="required">#}
+{##}
+{#        </form>#}
+{##}
+{##}
+{#    </div>#}
+{#    <div class="container">#}
+{#        <button type="submit">提交</button>#}
+{#    </div>#}
+{#    <h5 class="col-lg-1 col-lg-offset-1">留言</h5>#}
+{#留言展示区域#}
+<div class="container-fluid" style="background-color: #373d41; background-image:url(../static/picture/comment1.jpg); background-size:100% 100%">
+<br>
+<br>
+    <div class="container">
+        <div class="heading" style="margin-bottom: -19px">
+            <header class="text-uppercase" style="font-weight: bolder; font-size: 27px;">最新留言</header>
+        </div>
+        <hr>
+        <div>
+
+            <div class="comment-post well" style="background-color: #bc8d8a82;">
+
+                {% for mes in range(lenth) %}
+                <div class="col-lg-1" style="padding-left: 57px;">
+                    <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 30px; width: 30px;">
+                </div>
+                <div class="col-lg-11" style="padding-left: 0px">
+                    <h4 style="font-weight: 600">{{ allCri[mes].Nickname }}:</h4>
+                </div>
+                <div>
+                    <h4 style="margin-left: 90px">{{ allCri[mes].Criticism }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    {#    留言框    #}
+
+    <form method="post">
+        <br>
+        <br>
+        <div class="container" >
+            <div class="heading" style="margin-bottom: -19px">
+                <header class="text-uppercase" style="font-weight: bolder; font-size: 27px;">留言处</header>
+            </div>
+            <hr>
+            <div class="comment-post well" style="height: 213px; background-color: #bc8d8a82;">
+
+                <div class="cmtcontainer col-lg-12 col-lg-offset-1" >
+                    <input type="text" name="nickname" placeholder="我的昵称" required="required" style="height: 34px; width: 282px;">
+                </div>
+                <br>
+                <br>
+                <div class="col-lg-1">
+                    <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 30px; width: 30px;">
+                </div>
+
+                <div class="cmtcontainer col-lg-11" >
+                    <textarea name="criticism" placeholder="我也要吐槽" style="width: 879px; height: 101px; resize: none"></textarea>
+                </div>
+                <div class="col-lg-1 col-lg-offset-10">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

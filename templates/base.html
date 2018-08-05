@@ -93,6 +93,7 @@
                             <li class="active"><a href="/">首页 <span class="sr-only">(current)</span></a></li>
                             <li><a href="#">任务广场</a></li>
                             <li><a href="#">发布任务</a></li>
+                            <li><a href="/messagewall">留言墙</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -118,7 +119,7 @@
                                 <li><a href="/register">注册</a></li>
                             {% else %}
                                 <li><a>欢迎</a></li>
-                            {% endif %}
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ userlogin_name }} <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -129,6 +130,7 @@
                                     <li><a href="/">退出登陆</a></li>
                                 </ul>
                             </li>
+                            {% endif %}
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
