@@ -89,7 +89,7 @@ def index():
     return render_template('index2.html', title="主页")
 
 @app.route('/messagewall', methods=['GET', 'POST'])
-def messagewall():s
+def messagewall():
     global success
     global lenth
     success = 0             #评论初始值为0即失败
