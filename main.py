@@ -103,6 +103,8 @@ def messagewall():
         db.session.add(Criticismfrosql)
         db.session.commit()
         success = 1
+        allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
+        lenth = len(allCri)
         return render_template('messagewall.html', title="留言墙", success=success, allCri=allCri, lenth=lenth)
     return render_template('messagewall.html', title="留言墙", allCri=allCri, lenth=lenth)
 
