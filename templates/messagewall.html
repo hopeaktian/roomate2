@@ -17,43 +17,10 @@
 {#        <button type="submit">提交</button>#}
 {#    </div>#}
 {#    <h5 class="col-lg-1 col-lg-offset-1">留言</h5>#}
-{#留言展示区域#}
+
 <div class="container-fluid" style="background-color: #373d41; background-image:url(../static/picture/comment1.jpg); background-size:100% 100%">
-<br>
-<br>
-    <div class="container">
-        <div class="heading" style="margin-bottom: -19px">
-            <img src="../static/picture/4.gif" height="45px">
-            <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">最新留言</header>
-        </div>
-        <hr>
-        <div>
-
-            <div class="comment-post well" style="background-color: #bc8d8a82;">
-
-                {% for mes in range(lenth) %}
-                    <div class="row">
-                        <div class="col-sm-1" style="padding-left: 57px; width: auto">
-                            <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">
-                        </div>
-                        <div class="col-sm-6" style="">
-                            <h4 style="font-weight: 600; font-size: 1vw; width: auto">{{ allCri[mes].Nickname }}:</h4>
-                        </div>
-                        <div class="col-sm-5" style="">
-                            <h4 style="font-weight: 600; font-size: 1vw">{{ allCri[mes].Cri_Date }}:</h4>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 style="margin-left: 90px">{{ allCri[mes].Criticism }}</h4>
-                    </div>
-                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-
+    <br>
+    <br>
     {#    留言框    #}
 
     <form method="post">
@@ -90,17 +57,54 @@
                 </div>
 
 
-{#                <div class="col-sm-4">#}
-{#                    {% if success == 1 %}#}
-{#                        <div class="alert alert-success">#}
-{#                            留言成功！感谢您的支持 :)#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                </div>#}
+                {#                <div class="col-sm-4">#}
+                {#                    {% if success == 1 %}#}
+                {#                        <div class="alert alert-success">#}
+                {#                            留言成功！感谢您的支持 :)#}
+                {#                        </div>#}
+                {#                    {% endif %}#}
+                {#                </div>#}
             </div>
 
         </div>
     </form>
+
+
+    {#留言展示区域#}
+    <div class="container">
+        <div class="heading" style="margin-bottom: -19px">
+            <img src="../static/picture/4.gif" height="45px">
+            <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">最新留言</header>
+        </div>
+        <hr>
+        <div>
+
+            <div class="comment-post well" style="background-color: #bc8d8a82;">
+
+                {% for mes in range(lenth) %}
+                    <div class="row">
+                        <div class="col-sm-1" style="padding-left: 57px; width: auto">
+                            <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">
+                        </div>
+                        <div class="col-sm-6" style="">
+                            <h4 style="font-weight: 600; font-size: 1vw; width: auto">{{ allCri[mes].Nickname }}:</h4>
+                        </div>
+                        <div class="col-sm-5" style="">
+                            <h4 style="font-weight: 600; font-size: 1vw">{{ allCri[mes].Cri_Date }}:</h4>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-left: 90px">{{ allCri[mes].Criticism }}</h4>
+                    </div>
+                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
 
 
 
