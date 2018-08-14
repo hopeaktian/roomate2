@@ -11,32 +11,60 @@
         <hr>
         <div>
 
-            <div class="comment-post well" style="background-color: #d0d3d2cf;">
+            <div class="comment-post well" style="background-color: #f5f5f5fa;">
 
-                {% for order in range(lenth) %}
-                    <div class="row">
-                        <div class="col-sm-1" style="padding-left: 57px; width: auto">
-                            <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">
-                        </div>
+{#                {% for order in range(lenth) %}#}
+{#                    <div class="row">#}
+{#                        <div class="col-sm-1" style="padding-left: 57px; width: auto">#}
+{#                            <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-sm-1" >#}
+{#                            <h4 style="font-weight: 600; font-size: 1vw; width: auto">{{ allorderwall[order].User.Username }}:</h4>#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-sm-5" style="">#}
+{#                            <h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ allorderwall[order].Id }}">{{ allorderwall[order].Title }}</a></h4>#}
+{#                        </div>#}
+{##}
+{#                        <div class="col-sm-5" style="">#}
+{#                            <h4 style="font-weight: 600; font-size: 1vw">{{ allorderwall[order].Order_Date }}:</h4>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    #}
+{#                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">#}
 
-                        <div class="col-sm-1" >
-                            <h4 style="font-weight: 600; font-size: 1vw; width: auto">{{ allorderwall[order].User.Username }}:</h4>
-                        </div>
 
-                        <div class="col-sm-5" style="">
-                            <h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ allorderwall[order].Id }}">{{ allorderwall[order].Title }}</a></h4>
-                        </div>
+                    <div>
+                        <table class="table table-responsive table-hover table-striped">
+                            <caption></caption>
+                            <thead>
+                            <tr>
+                                <th>用户名</th>
+                                <th>任务订单标题</th>
+                                <th>下单时间</th>
+                                <th>订单截止时间</th>
+                                <th>暂定</th>
 
-                        <div class="col-sm-5" style="">
-                            <h4 style="font-weight: 600; font-size: 1vw">{{ allorderwall[order].Order_Date }}:</h4>
-                        </div>
+                            </tr>
+                            </thead>
+                            {% for order in range(lenth) %}
+                            <tbody>
+                            <tr>
+                                <td>{{ allorderwall[order].User.Username }}</td>
+                                <td><h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ allorderwall[order].Id }}">{{ allorderwall[order].Title }}</a></h4></td>
+                                <td>{{ allorderwall[order].Order_Date }}</td>
+                                <td>{{ allorderwall[order].Dead_Date }}</td>
+                                <td>暂定</td>
+                            </tr>
+
+                            </tbody>
+                            {% endfor %}
+
+                        </table>
                     </div>
 
-{#                    <div>#}
-{#                        <h4 style="margin-left: 90px">{{ allorderwall[order].Details }}</h4>#}
-{#                    </div>#}
-                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
-                {% endfor %}
+{#                {% endfor %}#}
             </div>
         </div>
     </div>

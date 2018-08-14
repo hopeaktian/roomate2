@@ -71,7 +71,7 @@
                                 <td>{{ AboutOrder.User.Tel_Number }}</td>
                                 <td>{{ AboutOrder.User.Email }}</td>
                                 <td>{{ AboutOrder.Order_Date }}</td>
-                                <td>{{ AboutOrder.Order_Date }}</td>
+                                <td>{{ AboutOrder.Dead_Date }}</td>
                             </tr>
 
                             </tbody>
@@ -94,7 +94,12 @@
                     <div>
                         <h3>订单描述:</h3>
                         <h4 style="margin-left: 90px">{{ AboutOrder.Details }}</h4>
+                        {% if AboutOrder.Picture_Name is not none %}
+                            <img src="../static/Upload_File/{{ AboutOrder.Picture_Name }}" style="width: 50%; height: 50%">
+                        {% endif %}
+
                     </div>
+
 
                     <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
 

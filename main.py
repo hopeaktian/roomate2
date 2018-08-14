@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import datetime
+import datetime, os
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from config import DevConfig
+from werkzeug import secure_filename
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import not_, or_
@@ -17,6 +18,13 @@ db = SQLAlchemy(app)
 
 #bootstrap = Bootstrap(app)
 
+UPLOAD_FOLDER = "./static/Upload_File/"
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 #数据模型部分
@@ -59,6 +67,8 @@ class Order(db.Model):
     Finish = db.Column(db.Integer(), nullable=False)
     Who_Get = db.Column(db.Integer())
     Order_Date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
+    Dead_Date = db.Column(db.DateTime, nullable=False)
+    Picture_Name = db.Column(db.String(255))
     User_id = db.Column(db.Integer(), db.ForeignKey('User.Id'))
 
     def __init__(self, title):
@@ -89,16 +99,16 @@ class Criticism(db.Model):
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('index2.html', title='主页', userlogin_name=session['username'])
-    return render_template('index2.html', title="主页")
+        return render_template('index2.html', title=u'主页', userlogin_name=session['username'])
+    return render_template('index2.html', title=u"主页")
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('error.html'), 404
+    return render_template('error.html', title=u"错误"), 404
 
 @app.errorhandler(500)
 def page_not_found(e):
-    return render_template('error.html'), 500
+    return render_template('error.html', title=u"错误"), 500
 
 @app.route('/messagewall', methods=['GET', 'POST'])
 def messagewall():
@@ -109,6 +119,11 @@ def messagewall():
     allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
     lenth = len(allCri)
 
+    if 'username' in session:
+        userlogin_name = session['username']
+    else:
+        userlogin_name = None
+
     if request.method == 'POST':
         Criticismfrosql = Criticism(request.form.get("nickname"), request.form.get("criticism"))
         db.session.add(Criticismfrosql)
@@ -116,8 +131,9 @@ def messagewall():
         success = 1
         allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
         lenth = len(allCri)
-        return render_template('messagewall.html', title="留言墙", success=success, allCri=allCri, lenth=lenth)
-    return render_template('messagewall.html', title="留言墙", allCri=allCri, lenth=lenth)
+
+        return render_template('messagewall.html', title=u"留言墙", success=success, allCri=allCri, lenth=lenth, userlogin_name=session['username'])
+    return render_template('messagewall.html', title=u"留言墙", allCri=allCri, lenth=lenth, userlogin_name=session['username'])
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -140,13 +156,13 @@ def login():
             # flash(u'登陆成功', category="success")
             session['username'] = userlogin_name
 
-            return render_template('index2.html', userlogin_name=session['username'], log=log)
+            return render_template('index2.html', userlogin_name=session['username'], log=log, title=u"登陆")
 
         else:
             # flash(u'用户名或密码错误！', category="danger")
             status = 0
-            return  render_template('login2.html', status=status, log=log)
-    return render_template('login2.html', title="测试登陆", log=log)
+            return  render_template('login2.html', status=status, log=log, title=u"登陆")
+    return render_template('login2.html', title=u"登陆", log=log)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -173,22 +189,36 @@ def register():
             db.session.commit()
             flag = 1
             # flash("恭喜您！注册成功", category="success")
-    return render_template('register.html', exist=exist, flag=flag)
+    return render_template('register.html', exist=exist, flag=flag, title=u"注册")
 
 @app.route('/order', methods=['GET', 'POST'])
 def order(success=0):
     if 'username' not in session:
-        return render_template('order.html')
+        return render_template('order.html', title=u"创建订单")
     elif request.method == 'POST':
         user = User.query.filter_by(Username=session['username']).first()
         new_order = Order(request.form.get("title"))
         new_order.Details = request.form.get("detials")
+        new_order.Dead_Date = request.form.get("diedate")
         new_order.Finish = 0
         new_order.User_id = user.Id
+
         db.session.add(new_order)
         db.session.commit()
+
+        if request.files.has_key("inputFile"):
+            file = request.files['inputFile']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                index_point = filename.index(".")
+                filename = str(new_order.Id)+filename[index_point:]
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                new_order.Picture_Name = filename
+
+                db.session.add(new_order)
+                db.session.commit()
         success = 1
-    return render_template('order.html', userlogin_name=session['username'], success=success)
+    return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], success=success)
 
 @app.route('/orderwall', methods=['GET', 'POST'])
 def orderwall():
@@ -196,13 +226,13 @@ def orderwall():
     user = User.query.all()
     lenth = Order.query.count()
 
-    return render_template('orderwall.html', title="任务广场",allorderwall=allorderwall, lenth=lenth)
+    return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'])
 
 
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
 def showdetails(order_id):
     AboutOrder = Order.query.filter_by(Id=order_id).first()
-    return render_template('OrderDetails.html', title="任务详情", AboutOrder=AboutOrder)
+    return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, userlogin_name=session['username'])
 
 
 if __name__ == '__main__':
