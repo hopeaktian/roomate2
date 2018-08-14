@@ -101,8 +101,8 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="/">首页 <span class="sr-only">(current)</span></a></li>
-                            <li><a href="#">任务广场</a></li>
-                            <li><a href="#">发布任务</a></li>
+                            <li><a href="/orderwall">任务广场</a></li>
+                            <li><a href="/order">发布任务</a></li>
                             <li><a href="/messagewall">留言墙</a></li>
 {#                            <li class="dropdown">#}
 {#                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>#}
@@ -125,7 +125,7 @@
 {#                        </form>#}
                         <ul class="nav navbar-nav navbar-right">
                             <li><img src="../static/picture/5.gif" height="54px"></li>
-                            {% if log != 1  %}
+                            {% if userlogin_name == NULL  %}
                                 <li><a href="/login">登陆</a></li>
                                 <li><a href="/register">注册</a></li>
                             {% else %}
@@ -138,7 +138,7 @@
                                     <li><a href="#">修改用户信息</a></li>
                                     <li><a href="#"></a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/">退出登陆</a></li>
+                                    <li><a href="/logout">退出登陆</a></li>
                                 </ul>
                             </li>
                             {% endif %}

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, session, redirect, url_for
 from config import DevConfig
 
 from flask_sqlalchemy import SQLAlchemy
@@ -15,31 +15,7 @@ app.config.from_object(DevConfig)
 
 db = SQLAlchemy(app)
 
-bootstrap = Bootstrap(app)
-# 表单对象
-# class RegisterForm(Form):
-#     Name = StringField(
-#         u'名字',
-#         validators=[DataRequired(), Length(max=255)]
-#     )
-#
-#     Password = StringField(
-#         u'密码',
-#         validators=[DataRequired(), Length(max=255)]
-#     )
-#
-#     Email = StringField(
-#         u'邮件',
-#         validators=[DataRequired, Email()]
-#     )
-#     Tel = IntegerField(
-#         u'电话',
-#         validators=[DataRequired, Length(max=11)]
-#     )
-#     Gender = SelectField(
-#         u'性别',
-#         validators=[DataRequired()]
-#     )
+#bootstrap = Bootstrap(app)
 
 
 
@@ -54,6 +30,11 @@ class User(db.Model):
     Email = db.Column(db.String(255))
     Tel_Number = db.Column(db.String(255))
     Register_Date = db.Column(db.DateTime, default=datetime.datetime.now)
+    Orders = db.relationship(
+        'Order',
+        backref='User',
+        lazy='dynamic'
+    )
 
 #以下的两个def 可以不用写，系统会自动添加    
     def __init__(self, username, password, gender, email, tel):
@@ -63,8 +44,28 @@ class User(db.Model):
         self.Email = email
         self.Tel_Number = tel
 
-    def __repr__(self):
-        return "<User '{} {} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number, self.Register_Date)
+    # def __repr__(self):
+    #     return "<User '{} {} {} {} {} {} '>" .format(self.Username, self.Password, self.Gender, self.Email, self.Tel_Number, self.Register_Date)
+
+
+
+class Order(db.Model):
+    __tablename__ = 'Order'
+
+    Id = db.Column(db.Integer(), primary_key=True)
+    Title = db.Column(db.String(255), nullable=False)
+    Details = db.Column(db.String(255), nullable=False)
+    # Order_Tel = db.Column(db.String(255))
+    Finish = db.Column(db.Integer(), nullable=False)
+    Who_Get = db.Column(db.Integer())
+    Order_Date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
+    User_id = db.Column(db.Integer(), db.ForeignKey('User.Id'))
+
+    def __init__(self, title):
+        self.Title = title
+
+
+
 
 class Criticism(db.Model):
     __tablename__ = 'Criticism'
@@ -87,6 +88,8 @@ class Criticism(db.Model):
 
 @app.route('/')
 def index():
+    if 'username' in session:
+        return render_template('index2.html', title='主页', userlogin_name=session['username'])
     return render_template('index2.html', title="主页")
 
 @app.errorhandler(404)
@@ -135,7 +138,9 @@ def login():
             status = 1
             log = 1
             # flash(u'登陆成功', category="success")
-            return render_template('index2.html', userlogin_name=userlogin_name, log=log)
+            session['username'] = userlogin_name
+
+            return render_template('index2.html', userlogin_name=session['username'], log=log)
 
         else:
             # flash(u'用户名或密码错误！', category="danger")
@@ -144,7 +149,10 @@ def login():
     return render_template('login2.html', title="测试登陆", log=log)
 
 
-
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -167,6 +175,34 @@ def register():
             # flash("恭喜您！注册成功", category="success")
     return render_template('register.html', exist=exist, flag=flag)
 
+@app.route('/order', methods=['GET', 'POST'])
+def order(success=0):
+    if 'username' not in session:
+        return render_template('order.html')
+    elif request.method == 'POST':
+        user = User.query.filter_by(Username=session['username']).first()
+        new_order = Order(request.form.get("title"))
+        new_order.Details = request.form.get("detials")
+        new_order.Finish = 0
+        new_order.User_id = user.Id
+        db.session.add(new_order)
+        db.session.commit()
+        success = 1
+    return render_template('order.html', userlogin_name=session['username'], success=success)
+
+@app.route('/orderwall', methods=['GET', 'POST'])
+def orderwall():
+    allorderwall = Order.query.order_by(Order.Id.desc()).all()
+    user = User.query.all()
+    lenth = Order.query.count()
+
+    return render_template('orderwall.html', title="任务广场",allorderwall=allorderwall, lenth=lenth)
+
+
+@app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
+def showdetails(order_id):
+    AboutOrder = Order.query.filter_by(Id=order_id).first()
+    return render_template('OrderDetails.html', title="任务详情", AboutOrder=AboutOrder)
 
 
 if __name__ == '__main__':

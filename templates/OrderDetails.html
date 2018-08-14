@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid" style="background-color: #29292a; background-size:100% 100%">
+        <br>
+        <br>
+        <div class="container">
+            <div class="heading" style="margin-bottom: -19px">
+                <img src="../static/picture/4.gif" height="45px">
+                <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">任务订单详情</header>
+            </div>
+            <hr>
+            <div>
+
+                <div class="comment-post well" style="background-color: #f5f5f5">
+
+{#                        <div class="row">#}
+{#                            <div class="col-sm-1" style="padding-left: 57px; width: auto">#}
+{#                                <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-sm-3" >#}
+{#                                <h4 style="font-weight: 600; font-size: 1vw; width: auto">用户名:{{ AboutOrder.User.Username }}</h4>#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-sm-4" style="">#}
+{#                                <h4 style="font-weight: 600; font-size: 1vw; width: auto">电话:{{ AboutOrder.User.Tel_Number }}</h4>#}
+{#                            </div>#}
+{##}
+{##}
+{##}
+{#                            <div class="col-sm-4" style="">#}
+{#                                <h4 style="font-weight: 600; font-size: 1vw">邮箱:{{ AboutOrder.User.Email }}</h4>#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{#                        <div class="row">#}
+{##}
+{#                            <div class="col-sm-1" style="padding-left: 57px; width: auto">#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-sm-3" style="">#}
+{#                                <h4 style="font-weight: 600; font-size: 1vw; width: auto">下单时间:{{ AboutOrder.Order_Date }}</h4>#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-sm-4" style="">#}
+{#                                <h4 style="font-weight: 600; font-size: 1vw; width: auto">订单截止完成时间:{{ AboutOrder.Order_Date }}</h4>#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+{##}
+{##}
+
+
+
+                    <div>
+                        <table class="table table-responsive">
+                            <caption></caption>
+                            <thead>
+                            <tr>
+                                <th>用户名</th>
+                                <th>电话</th>
+                                <th>邮箱</th>
+                                <th>下单时间</th>
+                                <th>订单截止时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ AboutOrder.User.Username }}</td>
+                                <td>{{ AboutOrder.User.Tel_Number }}</td>
+                                <td>{{ AboutOrder.User.Email }}</td>
+                                <td>{{ AboutOrder.Order_Date }}</td>
+                                <td>{{ AboutOrder.Order_Date }}</td>
+                            </tr>
+
+                            </tbody>
+
+
+{#                            <tr>#}
+{#                                <th style='text-align: center;'>订单详细描述内容</th>#}
+{#                            </tr>#}
+{##}
+{#                            <tbody>#}
+{#                                <tr>#}
+{#                                    <td>{{ AboutOrder.Details }}</td>#}
+{#                                </tr>#}
+{#                            </tbody>#}
+                        </table>
+                    </div>
+
+                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
+
+                    <div>
+                        <h3>订单描述:</h3>
+                        <h4 style="margin-left: 90px">{{ AboutOrder.Details }}</h4>
+                    </div>
+
+                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
+
+                    <div class="row">
+                        <div class="col-sm-1 col-sm-offset-8">
+                            <button type="submit" class="btn btn-primary">我要接单</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

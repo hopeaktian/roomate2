@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid" style="background-color: #29292a; background-size:100% 100%">
+    <br>
+    <br>
+    <div class="container">
+        <div class="heading" style="margin-bottom: -19px">
+            <img src="../static/picture/4.gif" height="45px">
+            <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">最新任务订单</header>
+        </div>
+        <hr>
+        <div>
+
+            <div class="comment-post well" style="background-color: #d0d3d2cf;">
+
+                {% for order in range(lenth) %}
+                    <div class="row">
+                        <div class="col-sm-1" style="padding-left: 57px; width: auto">
+                            <img src="http://i.bootstrapmb.com/noavatar.gif" style="height: 20px; width: 20px;">
+                        </div>
+
+                        <div class="col-sm-1" >
+                            <h4 style="font-weight: 600; font-size: 1vw; width: auto">{{ allorderwall[order].User.Username }}:</h4>
+                        </div>
+
+                        <div class="col-sm-5" style="">
+                            <h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ allorderwall[order].Id }}">{{ allorderwall[order].Title }}</a></h4>
+                        </div>
+
+                        <div class="col-sm-5" style="">
+                            <h4 style="font-weight: 600; font-size: 1vw">{{ allorderwall[order].Order_Date }}:</h4>
+                        </div>
+                    </div>
+
+{#                    <div>#}
+{#                        <h4 style="margin-left: 90px">{{ allorderwall[order].Details }}</h4>#}
+{#                    </div>#}
+                    <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
