@@ -242,7 +242,7 @@ def register():
 def order(success=0):
     checkuser()
     if 'username' not in session:
-        return render_template('order.html', title=u"创建订单")
+        return render_template('notlogin.html', title=u"创建订单")
     elif request.method == 'POST':
         user_now = User.query.filter_by(Username=session['username']).first()
         new_order = Order(request.form.get("title"))
