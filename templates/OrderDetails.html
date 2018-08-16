@@ -57,7 +57,7 @@
 
                     <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
 
-                    {% if AboutOrder.Finish == none %}
+                    {% if AboutOrder.Finish  == 0 %}
                         <div class="row">
                             <div class="col-sm-1 col-sm-offset-8">
                                 <a href="/orderwall/{{ AboutOrder.Id }}/confirm"><button type="button" class="btn btn-primary" style="width:315px; height:108px; font-size: 40px;">我要接单</button></a>
