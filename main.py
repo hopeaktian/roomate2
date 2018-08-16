@@ -149,29 +149,36 @@ def page_not_found(e):
 
 @app.route('/messagewall', methods=['GET', 'POST'])
 def messagewall():
-    checkuser()
     global success
     global lenth
+    global userlogin_name
     success = 0             #评论初始值为0即失败
     lenth = 0
     allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
     lenth = len(allCri)
 
     if 'username' in session:
+        user = User.query.filter_by(Username=session['username']).first()
         userlogin_name = session['username']
-    else:
-        userlogin_name = None
-
-    if request.method == 'POST':
-        Criticismfrosql = Criticism(request.form.get("nickname"), request.form.get("criticism"))
-        db.session.add(Criticismfrosql)
-        db.session.commit()
-        success = 1
-        allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
-        lenth = len(allCri)
+        if request.method == 'POST':
+            Criticismfrosql = Criticism(request.form.get("nickname"), request.form.get("criticism"))
+            db.session.add(Criticismfrosql)
+            db.session.commit()
+            success = 1
+            allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
+            lenth = len(allCri)
 
         return render_template('messagewall.html', title=u"留言墙", success=success, allCri=allCri, lenth=lenth, userlogin_name=session['username'], user=user)
-    return render_template('messagewall.html', title=u"留言墙", allCri=allCri, lenth=lenth, userlogin_name=session['username'], user=user)
+    else:
+        if request.method == 'POST':
+            Criticismfrosql = Criticism(request.form.get("nickname"), request.form.get("criticism"))
+            db.session.add(Criticismfrosql)
+            db.session.commit()
+            success = 1
+            allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
+            lenth = len(allCri)
+
+        return render_template('messagewall.html', title=u"留言墙", success=success, allCri=allCri, lenth=lenth)
 
 
 @app.route('/login', methods=['GET', 'POST'])

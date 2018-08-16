@@ -125,7 +125,7 @@
 {#                        </form>#}
                         <ul class="nav navbar-nav navbar-right">
                             <li><img src="/static/picture/5.gif" height="54px"></li>
-                            {% if userlogin_name == NULL  %}
+                            {% if 'username' not in session      %}
                                 <li><a href="/login">登陆</a></li>
                                 <li><a href="/register">注册</a></li>
                             {% else %}
@@ -136,8 +136,10 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="#">我的主页</a></li>
                                     <li><a href="#">修改用户信息</a></li>
-                                    <li><a href="/user/{{ user.Id }}/sendout">我发出的任务订单</a></li>
-                                    <li ><a href="/user/{{ user.Id }}/takein" style="color: red">我接受的任务订单</a></li>
+                                    {% if 'username' in session %}
+                                        <li><a href="/user/{{ user.Id }}/sendout">我发出的任务订单</a></li>
+                                        <li ><a href="/user/{{ user.Id }}/takein" style="color: red">我接受的任务订单</a></li>
+                                    {% endif %}
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/logout">退出登陆</a></li>
                                 </ul>
