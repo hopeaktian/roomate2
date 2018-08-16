@@ -22,7 +22,7 @@
                         <tr style="background-color: #5e5e5e ">
                             <th style="color: #e0e0e0">发单用户名</th>
                             <th style="color: #e0e0e0">任务订单标题</th>
-                            <th style="color: #e0e0e0">任务详情</th>
+{#                            <th style="color: #e0e0e0">任务详情</th>#}
                             <th style="color: #e0e0e0">下单时间</th>
                             <th style="color: #e0e0e0">订单截止时间</th>
                             <th style="color: orangered">订单被接受时间</th>
@@ -35,7 +35,7 @@
                             <tr>
                                 <td>{{ AboutOrder[order].User.Username }}</td>
                                 <td><h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ AboutOrder[order].Id }}">{{ AboutOrder[order].Title }}</a></h4></td>
-                                <td>{{ AboutOrder[order].Details }}</td>
+{#                                <td>{{ AboutOrder[order].Details }}</td>#}
                                 <td>{{ AboutOrder[order].Order_Date }}</td>
                                 <td>{{ AboutOrder[order].Dead_Date }}</td>
                                 <td>{{ AboutOrder[order].Got_Date }}</td>
