@@ -49,14 +49,14 @@
                             </tr>
                             </thead>
                             {% for order in range(lenth) %}
-                                {% if  allorderwall[order].Got_id == none and (allorderwall[order].Dead_Date - allorderwall[order].Order_Date).total_seconds()  > 0 and allorderwall[order].Finish == 0 %}
+                                {% if  allorderwall[order].Got_id == none and (allorderwall[order].Dead_Date - datetime.datetime.now()).total_seconds()  > 0 and allorderwall[order].Finish == 0 %}
                                     <tbody>
                                     <tr>
                                         <td>{{ allorderwall[order].User.Username }}</td>
                                         <td><h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ allorderwall[order].Id }}" title="点击查看订单详情">{{ allorderwall[order].Title }}</a></h4></td>
                                         <td>{{ allorderwall[order].Order_Date }}</td>
                                         <td>{{ allorderwall[order].Dead_Date }}</td>
-                                        <td style="color: red; font-weight: 600">{{ allorderwall[order].Dead_Date - allorderwall[order].Order_Date }}</td>
+                                        <td style="color: red; font-weight: 600">{{ (allorderwall[order].Dead_Date - datetime.datetime.now()) | format_time }}</td>
                                     </tr>
 
                                     </tbody>

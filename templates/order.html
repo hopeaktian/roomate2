@@ -4,7 +4,7 @@
         <h1>请先登陆！</h1>
     {% else %}
         <div class="container-fluid" style="background-color: #373d41; background-image:url(); background-size:100% 100%">
-            <form enctype='multipart/form-data' method="post">
+            <form enctype='multipart/form-data' method="post" novalidate>
                 <br>
                 <br>
                 <div class="container" >
@@ -60,7 +60,7 @@
     {#                                <input type="file" id="profile_pic" name="profile_pic"#}
     {#                                       accept=".jpg, .jpeg, .png" style="display:none" onchange="changeAgentContent()" />   #}
 
-                                    <input type="file" id="inputFile" name="inputFile" accept="image/*"  />
+                                    <input type="file" id="inputFile" name="inputFile" accept="image/*" capture/>
 
                                 </div>
                             </div>

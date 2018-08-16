@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime, os
+import datetime, os, time
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from config import DevConfig
 from werkzeug import secure_filename
@@ -15,6 +15,13 @@ app = Flask(__name__)
 app.config.from_object(DevConfig)
 
 db = SQLAlchemy(app)
+
+
+# 自定义jinja过滤器
+def time_format(l):
+    return str(l)[:-7]
+app.add_template_filter(time_format, 'format_time')
+
 
 #bootstrap = Bootstrap(app)
 
@@ -242,6 +249,7 @@ def register():
 def order(success=0):
     checkuser()
     now_time = datetime.datetime.now()
+
     global now_time
     if 'username' not in session:
         return render_template('notlogin.html', title=u"创建订单")
@@ -274,14 +282,17 @@ def order(success=0):
 # 任务大厅展示
 @app.route('/orderwall', methods=['GET', 'POST'])
 def orderwall():
+    # now_time = float(time.mktime(datetime.datetime.now().timetuple()))
+    datetime = datetime
+    global datetime
     checkuser()
     allorderwall = Order.query.order_by(Order.Id.desc()).all()
     # user = User.query.all()
     lenth = Order.query.count()
 
     if 'username' in session:
-        return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'], user=user)
-    return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth)
+        return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'], user=user, datetime=datetime)
+    return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, datetime=datetime)
 
 # 订单详情
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
@@ -342,4 +353,4 @@ def takein(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=80)
+    app.run(host='192.168.2.110', port=80)
