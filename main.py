@@ -148,10 +148,18 @@ def index():
 
 @app.errorhandler(404)
 def page_not_found(e):
+    if 'username' in session:
+        global user
+        user = User.query.filter_by(Username=session['username']).first()
+        return render_template('error.html', title=u"错误", user=user, userlogin_name=session['username']), 404
     return render_template('error.html', title=u"错误"), 404
 
 @app.errorhandler(500)
 def page_not_found(e):
+    if 'username' in session:
+        global user
+        user = User.query.filter_by(Username=session['username']).first()
+        return render_template('error.html', title=u"错误", user=user), 500
     return render_template('error.html', title=u"错误"), 500
 
 @app.route('/messagewall', methods=['GET', 'POST'])
