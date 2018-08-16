@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid" style="background-color: #29292a; background-size:100% 100%">
+        <br>
+        <br>
+        <div class="container">
+            <div class="heading" style="margin-bottom: -19px">
+                <img src="/static/picture/4.gif" height="45px">
+                <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">我接受的任务订单：</header>
+            </div>
+            <hr>
+
+            <div class="comment-post well">
+
+
+
+
+                <div>
+                    <table class="table table-striped table-responsive table-hover ">
+                        <caption></caption>
+                        <thead>
+                        <tr style="background-color: #5e5e5e ">
+                            <th style="color: #e0e0e0">发单用户名</th>
+                            <th style="color: #e0e0e0">任务订单标题</th>
+                            <th style="color: #e0e0e0">任务详情</th>
+                            <th style="color: #e0e0e0">下单时间</th>
+                            <th style="color: #e0e0e0">订单截止时间</th>
+                            <th style="color: orangered">订单被接受时间</th>
+                            <th style="color: orangered">接单人</th>
+
+                        </tr>
+                        </thead>
+                        {% for order in range(lenth) %}
+                            <tbody>
+                            <tr>
+                                <td>{{ AboutOrder[order].User.Username }}</td>
+                                <td><h4 style="font-weight: 600; font-size: 1vw; width: auto"><a href="/orderwall/{{ AboutOrder[order].Id }}">{{ AboutOrder[order].Title }}</a></h4></td>
+                                <td>{{ AboutOrder[order].Details }}</td>
+                                <td>{{ AboutOrder[order].Order_Date }}</td>
+                                <td>{{ AboutOrder[order].Dead_Date }}</td>
+                                <td>{{ AboutOrder[order].Got_Date }}</td>
+                                <td>{{ AboutOrder[order].Got_User.Username }}</td>
+                                <td></td>
+                            </tr>
+
+                            </tbody>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+                {#                {% endfor %}#}
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+{% endblock content %}

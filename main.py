@@ -38,11 +38,18 @@ class User(db.Model):
     Email = db.Column(db.String(255))
     Tel_Number = db.Column(db.String(255))
     Register_Date = db.Column(db.DateTime, default=datetime.datetime.now)
-    Orders = db.relationship(
-        'Order',
-        backref='User',
-        lazy='dynamic'
-    )
+
+    # Orders = db.relationship(
+    #     'Order',
+    #     backref='User',
+    #     lazy='dynamic'
+    # )
+
+    # Get_Orders = db.relationship(
+    #     'Got_Order',
+    #     backref='User',
+    #     lazy='dynamic'
+    # )
 
 #以下的两个def 可以不用写，系统会自动添加    
     def __init__(self, username, password, gender, email, tel):
@@ -65,14 +72,38 @@ class Order(db.Model):
     Details = db.Column(db.String(255), nullable=False)
     # Order_Tel = db.Column(db.String(255))
     Finish = db.Column(db.Integer(), nullable=False)
-    Who_Get = db.Column(db.Integer())
+
     Order_Date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
     Dead_Date = db.Column(db.DateTime, nullable=False)
     Picture_Name = db.Column(db.String(255))
-    User_id = db.Column(db.Integer(), db.ForeignKey('User.Id'))
+    User_id = db.Column(db.Integer(), db.ForeignKey('User.Id'), nullable=False)         # 发单用户的Id
+    Got_id = db.Column(db.Integer(), db.ForeignKey('User.Id'))                          # 接单用户的Id
+
+    User = db.relationship('User', foreign_keys='Order.User_id')
+    Got_User = db.relationship('User', foreign_keys='Order.Got_id')
+
+    Got_Date = db.Column(db.DateTime)                                                     # 接单的时间
+
+    # Get_Orders = db.relationship(
+    #     'Got_Order',
+    #     backref='Order',
+    #     lazy='dynamic'
+    # )
 
     def __init__(self, title):
         self.Title = title
+
+# class Got_Order(db.Model):
+#
+#     __tablename__ = 'Got_Order'
+#
+#     Id = db.Column(db.Integer(), primary_key=True)
+#     Got_Date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
+#     User_id = db.Column(db.Integer(), db.ForeignKey('User.Id'))
+#     Order_id = db.Column(db.Integer(), db.ForeignKey('Order.Id'))
+#
+#     def __int__(self, order_id):
+#         self.Order_id = order_id
 
 
 
@@ -95,12 +126,18 @@ class Criticism(db.Model):
 
 
 # 路由部分
+def checkuser():
+    if 'username' in session:
+        global user
+        user = User.query.filter_by(Username=session['username']).first()
 
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('index2.html', title=u'主页', userlogin_name=session['username'])
-    return render_template('index2.html', title=u"主页")
+        global user
+        user = User.query.filter_by(Username=session['username']).first()
+        return render_template('index2.html', title=u'袋鼠邻居主页', userlogin_name=session['username'], user=user)
+    return render_template('index2.html', title=u"袋鼠邻居主页")
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -112,6 +149,7 @@ def page_not_found(e):
 
 @app.route('/messagewall', methods=['GET', 'POST'])
 def messagewall():
+    checkuser()
     global success
     global lenth
     success = 0             #评论初始值为0即失败
@@ -132,12 +170,13 @@ def messagewall():
         allCri = Criticism.query.order_by(Criticism.Id.desc()).all()
         lenth = len(allCri)
 
-        return render_template('messagewall.html', title=u"留言墙", success=success, allCri=allCri, lenth=lenth, userlogin_name=session['username'])
-    return render_template('messagewall.html', title=u"留言墙", allCri=allCri, lenth=lenth, userlogin_name=session['username'])
+        return render_template('messagewall.html', title=u"留言墙", success=success, allCri=allCri, lenth=lenth, userlogin_name=session['username'], user=user)
+    return render_template('messagewall.html', title=u"留言墙", allCri=allCri, lenth=lenth, userlogin_name=session['username'], user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    checkuser()
     global log
     global status
     log = 0
@@ -156,12 +195,12 @@ def login():
             # flash(u'登陆成功', category="success")
             session['username'] = userlogin_name
 
-            return render_template('index2.html', userlogin_name=session['username'], log=log, title=u"登陆")
+            return render_template('index2.html', userlogin_name=session['username'], log=log, title=u"登陆", user=user)
 
         else:
             # flash(u'用户名或密码错误！', category="danger")
             status = 0
-            return  render_template('login2.html', status=status, log=log, title=u"登陆")
+            return  render_template('login2.html', status=status, log=log, title=u"登陆", user=user)
     return render_template('login2.html', title=u"登陆", log=log)
 
 
@@ -191,17 +230,19 @@ def register():
             # flash("恭喜您！注册成功", category="success")
     return render_template('register.html', exist=exist, flag=flag, title=u"注册")
 
+# 发订单
 @app.route('/order', methods=['GET', 'POST'])
 def order(success=0):
+    checkuser()
     if 'username' not in session:
         return render_template('order.html', title=u"创建订单")
     elif request.method == 'POST':
-        user = User.query.filter_by(Username=session['username']).first()
+        user_now = User.query.filter_by(Username=session['username']).first()
         new_order = Order(request.form.get("title"))
         new_order.Details = request.form.get("detials")
         new_order.Dead_Date = request.form.get("diedate")
         new_order.Finish = 0
-        new_order.User_id = user.Id
+        new_order.User_id = user_now.Id
 
         db.session.add(new_order)
         db.session.commit()
@@ -218,21 +259,76 @@ def order(success=0):
                 db.session.add(new_order)
                 db.session.commit()
         success = 1
-    return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], success=success)
+    return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], user=user, success=success)
 
+# 任务大厅展示
 @app.route('/orderwall', methods=['GET', 'POST'])
 def orderwall():
+    checkuser()
     allorderwall = Order.query.order_by(Order.Id.desc()).all()
-    user = User.query.all()
+    # user = User.query.all()
     lenth = Order.query.count()
 
-    return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'])
+    if 'username' in session:
+        return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'], user=user)
+    return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth)
 
-
+# 订单详情
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
 def showdetails(order_id):
+    checkuser()
     AboutOrder = Order.query.filter_by(Id=order_id).first()
-    return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, userlogin_name=session['username'])
+    if 'username' in session:
+        return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, userlogin_name=session['username'], user=user)
+    return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder)
+
+# 确认接单
+@app.route('/orderwall/<int:order_id>/confirm', methods=['GET', 'POST'])
+def getorder(order_id):
+    checkuser()
+    got_success = 0
+    AboutOrder = Order.query.filter_by(Id=order_id).first()
+    if 'username' not in session:
+        return render_template('notlogin.html', title=u"请先登陆")
+    elif request.method == 'POST':
+        if request.form.get("confirm") == "1":
+            get_user = User.query.filter_by(Username=session['username']).first()
+            AboutOrder.Got_id = get_user.Id
+            AboutOrder.Got_Date = datetime.datetime.now()
+            db.session.add(AboutOrder)
+            db.session.commit()
+            got_success = 1
+            return redirect(url_for('takein', user_id=get_user.Id))
+        else:
+            return redirect(url_for('orderwall'))
+
+    return render_template('confirmorder.html', title=u"确认接单", AboutOrder=AboutOrder, userlogin_name=session['username'], got_success=got_success, user=user)
+
+@app.route('/user/<int:user_id>/sendout', methods=['POST', 'GET'])
+def sendout(user_id):
+    checkuser()
+
+    AboutOrder = Order.query.filter_by(User_id=user_id).order_by(Order.Id.desc()).all()
+    lenth = len(AboutOrder)
+    if request.method == "POST":
+        user_order = Order.query.filter_by(Id=request.form.get("order_id")).first()
+        if request.form.get("cancel") == "1":                                                       #取消订单
+            user_order.Finish = request.form.get("cancel")
+            db.session.add(user_order)
+            db.session.commit()
+        else:
+            user_order.Finish = request.form.get("finish")                                          #确认收货
+            db.session.add(user_order)
+            db.session.commit()
+    return render_template('sendout.html', title=u"发出订单", AboutOrder=AboutOrder, lenth=lenth, userlogin_name=session['username'], user=user)
+
+@app.route('/user/<int:user_id>/takein')
+def takein(user_id):
+    checkuser()
+
+    AboutOrder = Order.query.filter_by(Got_id=user_id).order_by(Order.Id.desc()).all()
+    lenth = len(AboutOrder)
+    return render_template('takein.html', title=u"接受订单", AboutOrder=AboutOrder, lenth=lenth, userlogin_name=session['username'], user=user)
 
 
 if __name__ == '__main__':

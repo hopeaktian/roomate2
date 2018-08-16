@@ -1,19 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
+
     <div class="container-fluid" style="background-color: #29292a; background-size:100% 100%">
         <br>
         <br>
         <div class="container">
             <div class="heading" style="margin-bottom: -19px">
-                <img src="../static/picture/4.gif" height="45px">
-                <header class="text-uppercase text-center" style="font-weight: bolder; font-size: 27px; color: #09a0ba">任务标题：{{ AboutOrder.Title }}</header>
+                <img src="/static/picture/4.gif" height="45px">
                 <header class="text-uppercase" style="font-weight: bolder; font-size: 27px; color: #09a0ba">任务订单详情</header>
-
             </div>
+            <br>
+            <div class="container" style="border: double; border-width: 7px; background-color: #ffd100de ">
+                <div class="text-center" style="margin-top: 60px; margin-bottom: 60px">
+                    <form method="post" >
+                        <button name="confirm" value="1" class="btn-danger" style="width: 116px; height: 76px;">确认接单</button>
+                        <button name="confirm" value="0" class="btn-default" style="width: 116px; height: 76px;">取消</button>
+                    </form>
+                </div>
+            </div>
+            {% if got_success == 1 %}
+                <div class="alert alert-success">
+                    订单已接受！请注意任务截止时间，及时帮用户完成订单任务！ :)
+                </div>
+            {% endif %}
+
             <hr>
             <div>
 
                 <div class="comment-post well" style="background-color: #f5f5f5">
+
+
+
 
 
                     <div>
@@ -40,6 +57,15 @@
                             </tbody>
 
 
+                            {#                            <tr>#}
+                            {#                                <th style='text-align: center;'>订单详细描述内容</th>#}
+                            {#                            </tr>#}
+                            {##}
+                            {#                            <tbody>#}
+                            {#                                <tr>#}
+                            {#                                    <td>{{ AboutOrder.Details }}</td>#}
+                            {#                                </tr>#}
+                            {#                            </tbody>#}
                         </table>
                     </div>
 
@@ -49,7 +75,7 @@
                         <h3>订单描述:</h3>
                         <h4 style="margin-left: 90px">{{ AboutOrder.Details }}</h4>
                         {% if AboutOrder.Picture_Name is not none %}
-                            <img src="../static/Upload_File/{{ AboutOrder.Picture_Name }}" style="width: 50%; height: 50%">
+                            <img src="/static/Upload_File/{{ AboutOrder.Picture_Name }}" style="width: 50%; height: 50%">
                         {% endif %}
 
                     </div>
@@ -57,13 +83,7 @@
 
                     <hr size=3 style=" border-color: #000000; border-style:dotted;width:490">
 
-                    {% if AboutOrder.Finish == none %}
-                        <div class="row">
-                            <div class="col-sm-1 col-sm-offset-8">
-                                <a href="/orderwall/{{ AboutOrder.Id }}/confirm"><button type="button" class="btn btn-primary" style="width:315px; height:108px; font-size: 40px;">我要接单</button></a>
-                            </div>
-                        </div>
-                    {% endif %}
+
 
                 </div>
             </div>
@@ -73,4 +93,4 @@
 
 
 
-{% endblock %}
+{% endblock content %}
