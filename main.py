@@ -241,9 +241,12 @@ def register():
 @app.route('/order', methods=['GET', 'POST'])
 def order(success=0):
     checkuser()
+    now_time = datetime.datetime.now()
+    global now_time
     if 'username' not in session:
         return render_template('notlogin.html', title=u"创建订单")
     elif request.method == 'POST':
+
         user_now = User.query.filter_by(Username=session['username']).first()
         new_order = Order(request.form.get("title"))
         new_order.Details = request.form.get("detials")
@@ -266,7 +269,7 @@ def order(success=0):
                 db.session.add(new_order)
                 db.session.commit()
         success = 1
-    return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], user=user, success=success)
+    return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], user=user, success=success, now_time=now_time)
 
 # 任务大厅展示
 @app.route('/orderwall', methods=['GET', 'POST'])
