@@ -394,4 +394,4 @@ def takein(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.2.110', port=80)
+    app.run(host='localhost', port=80)
