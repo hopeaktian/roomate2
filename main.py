@@ -303,12 +303,10 @@ def order(success=0):
 
         file = request.files['inputFile']
         filename = file.filename
-        print filename
         index_point = filename.index(".")
         filename = str(new_order.Id)+filename[index_point:]
-        print filename
         basepath = os.path.dirname(__file__)
-        upload_path = os.path.join(basepath, '/static/upload_File', secure_filename(filename))
+        upload_path = os.path.join(basepath, './static/upload_File', secure_filename(filename))
         file.save(upload_path)
 
         new_order.Picture_Name = filename
@@ -394,4 +392,4 @@ def takein(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=80)
+    app.run(host='192.168.2.110', port=80)
