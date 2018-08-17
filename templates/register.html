@@ -35,6 +35,13 @@
                 </div>
             </div>
             <div class="form-group">
+                {#                <label  class="col-sm-4 control-label" style="color: #888888">密码</label>#}
+                <div class="col-sm-8 col-sm-offset-2">
+                    <input type="password" class="form-control" name="repassword" placeholder="请确认密码" required="required">
+                </div>
+            </div>
+
+            <div class="form-group">
 {#                <label  class="col-sm-4 control-label" style="color: #888888">邮件</label>#}
                 <div class="col-sm-8 col-sm-offset-2">
                     <input type="email" class="form-control" name="Email" placeholder="请输入邮件" required="required">
@@ -71,6 +78,14 @@
                 <div class="alert alert-danger">
                     注册失败！！用户名已存在!   换个更个性的用户名吧 -_-
                 </div>
+                {% elif repassword == 0 %}
+                    <div class="alert alert-danger">
+                        注册失败！两次密码不一致！
+                    </div>
+                {% elif password_lenth == 0 %}
+                    <div class="alert alert-danger">
+                        注册失败！密码要大于6位！
+                    </div>
                 {% elif flag == 1 %}
                 <div class="alert alert-success">
                     恭喜您！注册成功

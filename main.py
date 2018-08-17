@@ -2,7 +2,7 @@
 import datetime, os, time
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from config import DevConfig
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import not_, or_
@@ -25,9 +25,9 @@ app.add_template_filter(time_format, 'format_time')
 
 #bootstrap = Bootstrap(app)
 
-UPLOAD_FOLDER = "./static/Upload_File/"
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = "./static/Upload_File/"
+# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -235,15 +235,26 @@ def logout():
 def register():
     global exist
     global flag
+    global repassword
+    global password_lenth
+    repassword = 1
+    password_lenth = 1
     exist = 0
     flag = 0
     if request.method == 'POST':
         new_username = request.form.get("Name")
-        # Registertime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
         if User.query.filter_by(Username=new_username).all():
             exist = 1
             # flash(u"注册失败！！用户名已存在!   换个更个性的用户名吧 -_-", category="danger")
+        elif request.form.get("Password") != request.form.get("repassword"):
+            repassword = 0
+            return render_template('register.html', exist=exist, flag=flag, title=u"注册", repassword=repassword)
+        elif len(request.form.get("Password")) < 6:
+
+            password_lenth = 0
+            return render_template('register.html', exist=exist, flag=flag, title=u"注册", password_lenth=password_lenth)
+
         else:
             user_forsql = User(new_username, request.form.get("Password"), request.form.get("Gender"), request.form.get("Email"), request.form.get("Tel"))
             db.session.add(user_forsql)
@@ -256,12 +267,13 @@ def register():
 @app.route('/order', methods=['GET', 'POST'])
 def order(success=0):
     checkuser()
+    global now_time
     now_time = datetime.datetime.now()
 
-    global now_time
+
     if 'username' not in session:
         return render_template('notlogin.html', title=u"创建订单")
-    elif request.method == 'POST':
+    elif request.method == 'POST' and not request.files.has_key("inputFile"):
 
         user_now = User.query.filter_by(Username=session['username']).first()
         new_order = Order(request.form.get("title"))
@@ -272,27 +284,48 @@ def order(success=0):
 
         db.session.add(new_order)
         db.session.commit()
-
-        if request.files.has_key("inputFile"):
-            file = request.files['inputFile']
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                index_point = filename.index(".")
-                filename = str(new_order.Id)+filename[index_point:]
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                new_order.Picture_Name = filename
-
-                db.session.add(new_order)
-                db.session.commit()
         success = 1
+
+        return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], user=user, success=success, now_time=now_time)
+
+    elif request.method == 'POST':
+        user_now = User.query.filter_by(Username=session['username']).first()           # 数据库查询并取得当前用户对象
+        new_order = Order(request.form.get("title"))                                    # 数据库实例化新的Order对象
+
+        new_order.Details = request.form.get("detials")
+        new_order.Dead_Date = request.form.get("diedate")
+        new_order.Finish = 0
+        new_order.User_id = user_now.Id
+
+
+        db.session.add(new_order)
+        db.session.commit()                         # 先将除了图片的信息提交数据库，以免下面图片Id无法获取
+
+        file = request.files['inputFile']
+        filename = file.filename
+        print filename
+        index_point = filename.index(".")
+        filename = str(new_order.Id)+filename[index_point:]
+        print filename
+        basepath = os.path.dirname(__file__)
+        upload_path = os.path.join(basepath, 'static/upload_File', secure_filename(filename))
+        file.save(upload_path)
+
+        new_order.Picture_Name = filename
+        db.session.add(new_order)
+        db.session.commit()                         # 再将图片信息提交数据库
+
+        success = 1
+
     return render_template('order.html', title=u"创建订单", userlogin_name=session['username'], user=user, success=success, now_time=now_time)
 
 # 任务大厅展示
 @app.route('/orderwall', methods=['GET', 'POST'])
 def orderwall():
     # now_time = float(time.mktime(datetime.datetime.now().timetuple()))
-    datetime = datetime
     global datetime
+    datetime = datetime
+
     checkuser()
     allorderwall = Order.query.order_by(Order.Id.desc()).all()
     # user = User.query.all()
@@ -361,4 +394,4 @@ def takein(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=80)
+    app.run(host='192.168.2.110', port=80)
