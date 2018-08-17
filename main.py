@@ -336,11 +336,13 @@ def orderwall():
 # 订单详情
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
 def showdetails(order_id):
+    global datetime
+    datetime = datetime
     checkuser()
     AboutOrder = Order.query.filter_by(Id=order_id).first()
     if 'username' in session:
-        return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, userlogin_name=session['username'], user=user)
-    return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder)
+        return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, userlogin_name=session['username'], user=user, datetime=datetime)
+    return render_template('OrderDetails.html', title=u"任务详情", AboutOrder=AboutOrder, datetime=datetime)
 
 # 确认接单
 @app.route('/orderwall/<int:order_id>/confirm', methods=['GET', 'POST'])
