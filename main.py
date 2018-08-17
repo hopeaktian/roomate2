@@ -308,7 +308,7 @@ def order(success=0):
         filename = str(new_order.Id)+filename[index_point:]
         print filename
         basepath = os.path.dirname(__file__)
-        upload_path = os.path.join(basepath, 'static/upload_File', secure_filename(filename))
+        upload_path = os.path.join(basepath, '/static/upload_File', secure_filename(filename))
         file.save(upload_path)
 
         new_order.Picture_Name = filename
