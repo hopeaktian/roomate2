@@ -146,6 +146,11 @@ def index():
         return render_template('index2.html', title=u'袋鼠邻居主页', userlogin_name=session['username'], user=user)
     return render_template('index2.html', title=u"袋鼠邻居主页")
 
+@app.route('/MP_verify_FcIWodemzDz6J6Op.txt')
+def weixin():
+    return render_template('MP_verify_FcIWodemzDz6J6Op.txt')
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     if 'username' in session:
