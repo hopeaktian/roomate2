@@ -333,6 +333,12 @@ def orderwall():
         return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, userlogin_name=session['username'], user=user, datetime=datetime)
     return render_template('orderwall.html', title=u"任务广场",allorderwall=allorderwall, lenth=lenth, datetime=datetime)
 
+@app.route('/join', methods=['GET', 'POST'])
+def join():
+    checkuser()
+    return render_template("join.html", title=u"加入我们", user=user)
+
+
 # 订单详情
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
 def showdetails(order_id):

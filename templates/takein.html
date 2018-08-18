@@ -27,6 +27,7 @@
                             <th style="color: #e0e0e0">订单截止时间</th>
                             <th style="color: orangered">订单被接受时间</th>
                             <th style="color: orangered">接单人</th>
+                            <th style="color: orangered">订单状态</th>
 
                         </tr>
                         </thead>
@@ -40,6 +41,13 @@
                                 <td>{{ AboutOrder[order].Dead_Date }}</td>
                                 <td>{{ AboutOrder[order].Got_Date }}</td>
                                 <td>{{ AboutOrder[order].Got_User.Username }}</td>
+                                <td>
+                                    {% if  AboutOrder[order].Finish == 1 and AboutOrder[order].Got_id != none%}
+                                    <button  class="btn-success" disabled="disabled">用户已收货</button>
+                                    {% else %}
+                                    <button  class="btn-primary" disabled="disabled">等待用户收货</button>
+                                    {% endif %}
+                                </td>
                                 <td></td>
                             </tr>
 
