@@ -341,7 +341,9 @@ def orderwall():
 @app.route('/join', methods=['GET', 'POST'])
 def join():
     checkuser()
-    return render_template("join.html", title=u"加入我们", user=user)
+    if 'username' in session:
+        return render_template("join.html", title=u"加入我们", user=user)
+    return render_template("join.html", title=u"加入我们")
 
 
 # 订单详情
