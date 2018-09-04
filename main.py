@@ -345,6 +345,13 @@ def join():
         return render_template("join.html", title=u"加入我们", user=user)
     return render_template("join.html", title=u"加入我们")
 
+@app.route('/school_net', methods=['GET', 'POST'])
+def shcool_net():
+    checkuser()
+    if 'username' in session:
+        return render_template("net_tech.html", title=u"校园网共享教程", user=user)
+    return render_template("net_tech.html", title=u"校园网共享教程")
+
 
 # 订单详情
 @app.route('/orderwall/<int:order_id>', methods=['GET', 'POST'])
@@ -407,4 +414,4 @@ def takein(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.2.110', port=80)
+    app.run(host='localhost', port=80)
